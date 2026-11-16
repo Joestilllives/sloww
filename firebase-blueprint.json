@@ -1,0 +1,401 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user account profile and active sanctuary reference.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID matching document ID."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "User display name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200,
+          "description": "User email address (owner-only PII)."
+        },
+        "activeMapId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Currently selected mind map sanctuary ID."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "MindMap": {
+      "title": "MindMap",
+      "description": "A personal thinking sanctuary combining brain dumps, spatial mind map nodes, priorities, patterns, and companion notes.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Map document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Name of this thinking sanctuary."
+        },
+        "intention": {
+          "type": "string",
+          "maxLength": 400,
+          "description": "Grounding intention or focus question for this map."
+        },
+        "encouragementTitle": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Headline of the latest companion reflection."
+        },
+        "encouragementNote": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Wise, soothing, grounding reflection from the companion."
+        },
+        "encouragementStep": {
+          "type": "string",
+          "maxLength": 400,
+          "description": "One tiny compassionate next step."
+        },
+        "breathCount": {
+          "type": "integer",
+          "description": "Cumulative guided breathing cycles completed within this sanctuary."
+        },
+        "waterDrops": {
+          "type": "integer",
+          "description": "Cumulative mindful waterings given to the nourishment plant in this sanctuary."
+        },
+        "nourishmentOffset": {
+          "type": "integer",
+          "description": "Baseline activity points captured when replanting the nourishment seed."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["id", "ownerId", "title", "createdAt", "updatedAt"]
+    },
+    "MapNode": {
+      "title": "MapNode",
+      "description": "A spatial thought card on the mind map that can also hold a priority tier.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Node document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID."
+        },
+        "mapId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent map ID."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600,
+          "description": "Primary thought or action label."
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 1200,
+          "description": "Additional context or reflection."
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["thought", "anchor", "feeling", "question"],
+          "description": "Category of the node."
+        },
+        "priorityTier": {
+          "type": "string",
+          "enum": ["now", "next", "later", "none"],
+          "description": "Priority status directly integrated into the mind map."
+        },
+        "priorityOrder": {
+          "type": "number",
+          "description": "Sort position within priority tier (0 to 1000)."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether this priority/thought action has been completed."
+        },
+        "theme": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Thematic cluster name."
+        },
+        "x": {
+          "type": "number",
+          "description": "Canvas X coordinate."
+        },
+        "y": {
+          "type": "number",
+          "description": "Canvas Y coordinate."
+        },
+        "sourceDumpId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Optional ID of originating brain dump."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["id", "ownerId", "mapId", "text", "kind", "priorityTier", "priorityOrder", "completed", "x", "y", "createdAt", "updatedAt"]
+    },
+    "MapEdge": {
+      "title": "MapEdge",
+      "description": "A directional or associative thread connecting two mind map nodes.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Edge document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID."
+        },
+        "mapId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent map ID."
+        },
+        "fromId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Source node ID."
+        },
+        "toId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Target node ID."
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Relationship label between nodes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["id", "ownerId", "mapId", "fromId", "toId", "createdAt", "updatedAt"]
+    },
+    "BrainDump": {
+      "title": "BrainDump",
+      "description": "Unfiltered stream-of-consciousness note captured in the Brain Dump stream.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Brain dump document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID."
+        },
+        "mapId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent map ID."
+        },
+        "rawText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "Raw brain dump text."
+        },
+        "mapped": {
+          "type": "boolean",
+          "description": "Whether this dump has been unpacked onto the mind map."
+        },
+        "moodWord": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Optional emotional tone word."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["id", "ownerId", "mapId", "rawText", "mapped", "createdAt", "updatedAt"]
+    },
+    "PatternInsight": {
+      "title": "PatternInsight",
+      "description": "A recurring theme, emotional current, or gentle tension discovered across thoughts.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Pattern document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID."
+        },
+        "mapId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent map ID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140,
+          "description": "Short pattern name."
+        },
+        "insight": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 800,
+          "description": "Wise observation explaining the pattern."
+        },
+        "tone": {
+          "type": "string",
+          "enum": ["anchor", "tension", "momentum", "rest"],
+          "description": "Nature of the pattern."
+        },
+        "relatedNodeIds": {
+          "type": "array",
+          "description": "Up to 20 node IDs connected to this pattern."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["id", "ownerId", "mapId", "title", "insight", "tone", "relatedNodeIds", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user account metadata and active map pointer."
+    },
+    "/users/{userId}/maps/{mapId}": {
+      "schema": { "$ref": "#/entities/MindMap" },
+      "description": "User's saved thinking sanctuaries."
+    },
+    "/users/{userId}/maps/{mapId}/nodes/{nodeId}": {
+      "schema": { "$ref": "#/entities/MapNode" },
+      "description": "Mind map thought and integrated priority nodes."
+    },
+    "/users/{userId}/maps/{mapId}/edges/{edgeId}": {
+      "schema": { "$ref": "#/entities/MapEdge" },
+      "description": "Connections between mind map nodes."
+    },
+    "/users/{userId}/maps/{mapId}/dumps/{dumpId}": {
+      "schema": { "$ref": "#/entities/BrainDump" },
+      "description": "Raw brain dump stream entries."
+    },
+    "/users/{userId}/maps/{mapId}/patterns/{patternId}": {
+      "schema": { "$ref": "#/entities/PatternInsight" },
+      "description": "Discovered patterns linking themes across the map."
+    }
+  }
+}

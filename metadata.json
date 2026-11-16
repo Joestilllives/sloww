@@ -1,0 +1,6 @@
+{
+  "name": "Stillpoint",
+  "description": "A warm, grounding thinking studio blending brain dumps, an integrated priority mind map, smart pattern discovery, and a wise encouraging companion.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
